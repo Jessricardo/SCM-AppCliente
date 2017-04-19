@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp ">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <TextView
+            android:text="Bienvenido a Pizzas Apodaca"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:gravity="center"
+            android:textSize="24sp"
+            android:layout_marginTop="7dp" />
+        <TextView
+            android:text="Proporcione su número de telefono:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/edtTelefono" />
+        <TextView
+            android:text="Pizzas a elegir:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textSize="20sp"
+            android:layout_marginTop="7dp" />
+        <ListView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:id="@+id/pizzas" />
+        <TextView
+            android:text="Proporcione el número de la Pizza a elejir:"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/edtPizzaId" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/pedir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pedir Pizza"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
