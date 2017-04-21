@@ -5,11 +5,9 @@ using System;
 using Android.Content;
 using Newtonsoft.Json;
 using System.Net.Http;
-using System.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 namespace appCliente.Droid
 {
 	[Activity(Label = "appCliente", MainLauncher = true, Icon = "@mipmap/icon")]
@@ -17,9 +15,9 @@ namespace appCliente.Droid
 	{
 		//int count = 1;
 		public Button pedir;
-		public EditText telefono;
-		public 	int pizza;
-		public string telefono2;
+		public EditText telefono,edtPizzaId2;
+		public int pizza;
+		public long telefono2;
 		public ListView pizzas;
 		protected override async void OnCreate(Bundle savedInstanceState)
 		{
@@ -33,12 +31,13 @@ namespace appCliente.Droid
 			//button.Click += delegate { button.Text = $"{count++} clicks!"; };
 			pedir = FindViewById<Button>(Resource.Id.pedir);
 			pizzas = FindViewById<ListView>(Resource.Id.pizzas);
+			edtPizzaId2 = FindViewById<EditText>(Resource.Id.edtPizzaId);
 			telefono = FindViewById<EditText>(Resource.Id.edtTelefono);
-			telefono2 = telefono.Text;
 			List<string> nombres = new List<string>();
 			pedir.Click += pedirMetodo;
 			List<PizzaModel> json = await LeerApi();
-			for (int i = 0; i < json.Count; i++) {
+			for (int i = 0; i < json.Count; i++)
+			{
 				PizzaModel a = json.ElementAt(i);
 				string nombreCompleto = a.Id + " - " + a.Nombre;
 				nombres.Add(nombreCompleto);
@@ -53,9 +52,11 @@ namespace appCliente.Droid
 		{
 			Intent intento = new Intent(this, typeof(estado));
 			Bundle contenedor = new Bundle();
-			contenedor.PutInt("id",pizza);
-			contenedor.PutString("telefono",telefono2);
-			intento.PutExtra("bundle",contenedor);
+			pizza = int.Parse(edtPizzaId2.Text);
+			telefono2 = long.Parse(telefono.Text);
+			contenedor.PutInt("id", pizza);
+			contenedor.PutLong("telefono", telefono2);
+			intento.PutExtra("bundle", contenedor);
 			StartActivity(intento);
 		}
 		public async Task<List<PizzaModel>> LeerApi()
@@ -76,16 +77,6 @@ namespace appCliente.Droid
 				return null;
 			}
 		}
-	}
-
-	public class PizzaModel
-	{
-		public string Nombre { get; set; }
-		public int Id { get; set; }
-		public List<string> Ingredientes { get; set; } = new List<string>();
-		public int Caliicacion { get; set; }
-		public int TiempoDePreparacion { get; set; }
-		public Decimal Precio { get; set; }
 	}
 }
 
