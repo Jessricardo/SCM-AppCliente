@@ -9,6 +9,8 @@ using Android.OS;
 using Android.Widget;
 using Newtonsoft.Json;
 using Plugin.Geolocator;
+using Android.Gms.Maps;
+using Android.Gms.Maps.Model;
 
 namespace appCliente.Droid
 {
@@ -34,6 +36,7 @@ namespace appCliente.Droid
 			txtDistancia.Visibility = Android.Views.ViewStates.Gone;
 			distancia.Visibility = Android.Views.ViewStates.Gone;
 			actualizar.Visibility = Android.Views.ViewStates.Gone;
+
 			Bundle paquete = Intent.GetBundleExtra("bundle");
 			PedidoModel item = new PedidoModel();
 			item.pizza = paquete.GetInt("id");
@@ -70,7 +73,9 @@ namespace appCliente.Droid
 				progress.Hide();
 				Toast.MakeText(ApplicationContext, "¡Error al pedir la pizza!", ToastLength.Long).Show();
 			}
+
 		}
+
 		public async Task<Double> latitude()
 		{
 			var locator = CrossGeolocator.Current;
@@ -98,7 +103,13 @@ namespace appCliente.Droid
 				var content = response.Content.ReadAsStringAsync().Result;
 				var items = JsonConvert.DeserializeObject<PedidoModel>(content);
 				estadoPedido.Text = items.estado;
-				//Aqui va la distancia;
+				Android.Locations.Location puntoa = new Android.Locations.Location("punto A");
+				Android.Locations.Location puntob = new Android.Locations.Location("punto B");
+				puntoa.Latitude=items.latitud;
+				puntoa.Longitude = items.longitud;
+				puntob.Latitude = items.latitudRep;
+				puntob.Longitude = items.longitudRep;
+				distancia.Text = puntoa.DistanceTo(puntob).ToString();
 			}
 		}
 		public bool Postear(PedidoModel item)
@@ -119,5 +130,7 @@ namespace appCliente.Droid
 				return false;
 			}
 		}
+
+
 	}
 }

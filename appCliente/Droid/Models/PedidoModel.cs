@@ -13,5 +13,7 @@ namespace appCliente.Droid
 		public double longitud { get; set; }
 		public string estado { get; set; }
 		public string nombrerepartidor { get; set; }
+		public double latitudRep { get; set; }
+		public double longitudRep { get; set; }
 	}
 }
