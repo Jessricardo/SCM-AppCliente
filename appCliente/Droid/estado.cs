@@ -9,8 +9,6 @@ using Android.OS;
 using Android.Widget;
 using Newtonsoft.Json;
 using Plugin.Geolocator;
-using Android.Gms.Maps;
-using Android.Gms.Maps.Model;
 
 namespace appCliente.Droid
 {
@@ -93,7 +91,7 @@ namespace appCliente.Droid
 
 		public void actualizarMetodo(object sender, EventArgs e)
 		{
-			string baseurl = "http://192.168.0.107/api/pedidos/"+id.ToString();
+			string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos/"+id.ToString();
 			var Client = new HttpClient();
 			Client.MaxResponseContentBufferSize = 256000;
 			var uril = new Uri(baseurl);
@@ -114,7 +112,7 @@ namespace appCliente.Droid
 		}
 		public bool Postear(PedidoModel item)
 		{
-			string baseurl = "http://192.168.0.107/api/pedidos";
+			string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos";
 			var Client = new HttpClient();
 			Client.MaxResponseContentBufferSize = 256000;
 			var uril = new Uri(baseurl);

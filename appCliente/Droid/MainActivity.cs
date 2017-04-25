@@ -61,7 +61,7 @@ namespace appCliente.Droid
 		}
 		public async Task<List<PizzaModel>> LeerApi()
 		{
-			string baseurl = "http://192.168.0.107/api/allpizzas";
+			string baseurl = "http://scmrocket.azurewebsites.net/api/allpizzas";
 			var Client = new HttpClient();
 			Client.MaxResponseContentBufferSize = 256000;
 			var uril = new Uri(baseurl);
