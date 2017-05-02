@@ -30,11 +30,13 @@ namespace appCliente.Droid
 			//Button button = FindViewById<Button>(Resource.Id.myButton);
 			//button.Click += delegate { button.Text = $"{count++} clicks!"; };
 			pedir = FindViewById<Button>(Resource.Id.pedir);
+		
 			pizzas = FindViewById<ListView>(Resource.Id.pizzas);
 			edtPizzaId2 = FindViewById<EditText>(Resource.Id.edtPizzaId);
 			telefono = FindViewById<EditText>(Resource.Id.edtTelefono);
 			List<string> nombres = new List<string>();
 			pedir.Click += pedirMetodo;
+
 			List<PizzaModel> json = await LeerApi();
 			for (int i = 0; i < json.Count; i++)
 			{
@@ -59,6 +61,7 @@ namespace appCliente.Droid
 			intento.PutExtra("bundle", contenedor);
 			StartActivity(intento);
 		}
+
 		public async Task<List<PizzaModel>> LeerApi()
 		{
 			string baseurl = "http://scmrocket.azurewebsites.net/api/allpizzas";

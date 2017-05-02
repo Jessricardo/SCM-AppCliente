@@ -44,5 +44,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Actualizar" />
+        <Button
+            android:id="@+id/cancelar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancelar Pedido" />
     </LinearLayout>
 </RelativeLayout>

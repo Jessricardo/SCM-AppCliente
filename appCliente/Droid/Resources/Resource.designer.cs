@@ -262,6 +262,9 @@ namespace appCliente.Droid
 			// aapt resource value: 0x7f08000a
 			public const int auto = 2131230730;
 			
+			// aapt resource value: 0x7f080018
+			public const int cancelar = 2131230744;
+			
 			// aapt resource value: 0x7f08000b
 			public const int dark = 2131230731;
 			

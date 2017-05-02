@@ -16,7 +16,7 @@ namespace appCliente.Droid
 	public class estado : Activity
 	{
 		public TextView estadoPedido, distancia,txtEstado,txtDistancia;
-		public Button actualizar;
+		public Button actualizar,cancelar;
 		public int id;
 		protected async override void OnCreate(Bundle savedInstanceState)
 		{
@@ -28,13 +28,15 @@ namespace appCliente.Droid
 			estadoPedido = FindViewById<TextView>(Resource.Id.txtvwEstado);
 			distancia = FindViewById<TextView>(Resource.Id.txtvwDistancia);
 			actualizar = FindViewById<Button>(Resource.Id.actualizar);
+			cancelar = FindViewById<Button>(Resource.Id.cancelar);
 			actualizar.Click += actualizarMetodo;
+
 			estadoPedido.Visibility = Android.Views.ViewStates.Gone;
 			txtEstado.Visibility = Android.Views.ViewStates.Gone;
 			txtDistancia.Visibility = Android.Views.ViewStates.Gone;
 			distancia.Visibility = Android.Views.ViewStates.Gone;
 			actualizar.Visibility = Android.Views.ViewStates.Gone;
-
+			cancelar.Click += cancelarMetodo;
 			Bundle paquete = Intent.GetBundleExtra("bundle");
 			PedidoModel item = new PedidoModel();
 			item.pizza = paquete.GetInt("id");
@@ -71,7 +73,7 @@ namespace appCliente.Droid
 				progress.Hide();
 				Toast.MakeText(ApplicationContext, "¡Error al pedir la pizza!", ToastLength.Long).Show();
 			}
-
+			actualizarMetodo();
 		}
 
 		public async Task<Double> latitude()
@@ -88,10 +90,85 @@ namespace appCliente.Droid
 			var position = await locator.GetPositionAsync(10000);
 			return position.Longitude;
 		}
+		public void cancelarMetodo(object sender, EventArgs e)
+		{
+			string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos/" + id.ToString();
+			var Client = new HttpClient();
+			Client.MaxResponseContentBufferSize = 256000;
+			var uril = new Uri(baseurl);
+			var response = Client.GetAsync(uril).Result;
+			if (response.IsSuccessStatusCode)
+			{
+				var content = response.Content.ReadAsStringAsync().Result;
+				var items = JsonConvert.DeserializeObject<PedidoModel>(content);
 
+				if (items.estado == "Pedido")
+				{
+					
+
+					PedidoModel pedidos = items;
+					pedidos.estado = "Cancelado";
+					var Client2 = new HttpClient();
+					Client2.MaxResponseContentBufferSize = 256000;
+					var uril2 = new Uri(baseurl);
+					var json = JsonConvert.SerializeObject(pedidos);
+					StringContent content2 = new StringContent(json, Encoding.UTF8, "application/json");
+					var response2 = Client2.PutAsync(uril2, content2).Result;
+					if (response2.IsSuccessStatusCode)
+					{
+						Toast.MakeText(ApplicationContext, "Cancelado con exito", ToastLength.Long).Show();
+						Intent intento = new Intent(this, typeof(MainActivity));
+
+						StartActivity(intento);
+					}
+					else
+					{
+						Toast.MakeText(ApplicationContext, "Ha surgido un error, le sugerimos intentarlo más tarde", ToastLength.Long).Show();
+					}
+				}
+				else 
+				{Toast.MakeText(ApplicationContext, "No se puede cancelar porque el pedido ya esta en:"+items.estado.ToString(), ToastLength.Long).Show(); }
+
+			}
+		}
 		public void actualizarMetodo(object sender, EventArgs e)
 		{
-			string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos/"+id.ToString();
+			
+				string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos/" + id.ToString();
+				var Client = new HttpClient();
+				Client.MaxResponseContentBufferSize = 256000;
+				var uril = new Uri(baseurl);
+				var response = Client.GetAsync(uril).Result;
+				if (response.IsSuccessStatusCode)
+				{
+				
+					var content = response.Content.ReadAsStringAsync().Result;
+					var items = JsonConvert.DeserializeObject<PedidoModel>(content);
+				if (items.estado != "Finalizado")
+				{
+					estadoPedido.Text = items.estado;
+					Android.Locations.Location puntoa = new Android.Locations.Location("punto A");
+					Android.Locations.Location puntob = new Android.Locations.Location("punto B");
+					puntoa.Latitude = items.latitud;
+					puntoa.Longitude = items.longitud;
+					puntob.Latitude = items.latitudRep;
+					puntob.Longitude = items.longitudRep;
+					distancia.Text = puntoa.DistanceTo(puntob).ToString();
+					estadoPedido.Text = items.estado;
+				}
+				else if(items.estado=="Finalizado")
+				{
+					Toast.MakeText(ApplicationContext, "El repartidor ha finalizado", ToastLength.Long).Show();
+					Intent intento = new Intent(this, typeof(MainActivity));
+					StartActivity(intento);
+				}
+				}
+
+
+		}
+		public void actualizarMetodo()
+		{
+			string baseurl = "http://scmrocket.azurewebsites.net/api/pedidos/" + id.ToString();
 			var Client = new HttpClient();
 			Client.MaxResponseContentBufferSize = 256000;
 			var uril = new Uri(baseurl);
@@ -103,11 +180,12 @@ namespace appCliente.Droid
 				estadoPedido.Text = items.estado;
 				Android.Locations.Location puntoa = new Android.Locations.Location("punto A");
 				Android.Locations.Location puntob = new Android.Locations.Location("punto B");
-				puntoa.Latitude=items.latitud;
+				puntoa.Latitude = items.latitud;
 				puntoa.Longitude = items.longitud;
 				puntob.Latitude = items.latitudRep;
 				puntob.Longitude = items.longitudRep;
 				distancia.Text = puntoa.DistanceTo(puntob).ToString();
+				estadoPedido.Text = items.estado;
 			}
 		}
 		public bool Postear(PedidoModel item)
